@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using JetBrains.Annotations;
+﻿using HomeManager.TaskService.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace HomeManager.TaskService.Models
+namespace HomeManager.TaskService.DataLayer
 {
     public class TaskContext : DbContext
     {

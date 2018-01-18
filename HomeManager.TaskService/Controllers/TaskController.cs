@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HomeManager.TaskService.DataLayer;
+using HomeManager.TaskService.DataLayer.Dapper;
 using HomeManager.TaskService.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,6 +15,7 @@ namespace HomeManager.TaskService.Controllers
     public class TaskController : Controller
     {
         private readonly TaskContext _context;
+        private readonly ITaskItemRepository _repository;
 
         public TaskController(TaskContext context)
         {
@@ -20,15 +23,18 @@ namespace HomeManager.TaskService.Controllers
 
             if (!_context.TaskItems.Any())
             {
-                _context.TaskItems.Add(new TaskItem { Name = "Item1" });
+                _context.TaskItems.Add(new TaskItem { Subject = "Item1" });
                 _context.SaveChanges();
             }
+
+            _repository = new TaskItemRepository();
         }
 
         [HttpGet]
         public IEnumerable<TaskItem> GetAll()
         {
-            return _context.TaskItems.ToList();
+
+            return _repository.GetAll();//_context.TaskItems.ToList();
         }
 
         [HttpGet("{id}", Name = "GetTask")]
@@ -50,9 +56,8 @@ namespace HomeManager.TaskService.Controllers
                 return BadRequest();
             }
 
-            _context.TaskItems.Add(item);
-            _context.SaveChanges();
-
+            _repository.Add(item);
+            
             return CreatedAtRoute("GetTask", new { id = item.Id }, item);
         }
 
@@ -70,8 +75,8 @@ namespace HomeManager.TaskService.Controllers
                 return NotFound();
             }
 
-            todo.IsComplete = item.IsComplete;
-            todo.Name = item.Name;
+            todo.Priority = item.Priority;
+            todo.Subject = item.Subject;
 
             _context.TaskItems.Update(todo);
             _context.SaveChanges();

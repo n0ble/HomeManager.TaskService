@@ -7,8 +7,12 @@ namespace HomeManager.TaskService.Models
 {
     public class TaskItem
     {
-        public long Id { get; set; }
-        public string Name { get; set; }
-        public bool IsComplete { get; set; }
+        public int Id { get; set; }
+        public string Subject { get; set; }
+        public string Description { get; set; }
+        public string Priority { get; set; }
+        public string Severity { get; set; }
+        public string Asignee { get; set; }
+
     }
 }
